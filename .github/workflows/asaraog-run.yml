@@ -1,0 +1,16 @@
+name: asaraog-run
+on:
+  workflow_dispatch:
+    inputs:
+      ref: {required: true, type: string}
+      envs: {required: true, type: string}
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+        with: {ref: "${{ inputs.ref }}"}
+      - uses: astral-sh/setup-uv@v5.4.2
+      - run: uvx --with tox-uv tox run -e "${{ inputs.envs }}"
+        working-directory: python
